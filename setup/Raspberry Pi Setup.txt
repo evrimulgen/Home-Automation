@@ -1,13 +1,34 @@
 /***************************/
+	Check Version of Pi
+/***************************/
+http://www.raspberrypi-spy.co.uk/2012/09/checking-your-raspberry-pi-board-version/
+$ cat /proc/cpuinfo
+> Revision
+
+/***************************/
+	Pin Location
+/***************************/
+// Finding which way round
+1. 'P1' Will be somewhere next to the pins
+	this will show you which way round to read the pins
+2. See /images/pins.png to see locations
+// http://www.raspberrypi-spy.co.uk/2012/06/simple-guide-to-the-rpi-gpio-header-and-pins/
+
+/***************************/
 	SD Image
 /***************************/
+
 // Installs
 1. Raspbian --> https://www.raspberrypi.org/downloads/raspbian/
 2. Minibian --> https://minibianpi.wordpress.com/
 
-// Disk Imager for Mac OS X
+// Disk Imager for Mac OS X - Comes Up us 64 Meg Drive for some reason
 1. Pi Filler --> http://ivanx.com/raspberrypi/
+
+// Command Line
 2. Use dd command etc
+> See this guide
+https://www.raspberrypi.org/documentation/installation/installing-images/mac.md
 
 
 /***************************/
