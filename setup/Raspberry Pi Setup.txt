@@ -1,52 +1,31 @@
-/***************************/
-	Check Version of Pi
-/***************************/
-http://www.raspberrypi-spy.co.uk/2012/09/checking-your-raspberry-pi-board-version/
-$ cat /proc/cpuinfo
-> Revision
-
-/***************************/
-	Pin Location
-/***************************/
-// Finding which way round
-1. 'P1' Will be somewhere next to the pins
-	this will show you which way round to read the pins
-2. See /images/pins.png to see locations
-// http://www.raspberrypi-spy.co.uk/2012/06/simple-guide-to-the-rpi-gpio-header-and-pins/
-
-/***************************/
-	SD Image
-/***************************/
+/***********************************/
+	SD Image - Loading Onto Pi
+/***********************************/
 
 // Installs
 1. Raspbian --> https://www.raspberrypi.org/downloads/raspbian/
 2. Minibian --> https://minibianpi.wordpress.com/
 
-// Disk Imager for Mac OS X - Comes Up us 64 Meg Drive for some reason
-1. Pi Filler --> http://ivanx.com/raspberrypi/
+// Copy To SD
+1. On Mac / Linux Machine:
+> https://www.raspberrypi.org/documentation/installation/installing-images/mac.md
+$ sudo dd bs=1m if=/Users/james/Applications/MiniBian-Jessie.img of=/dev/rdisk1
 
-// Command Line
-2. Use dd command etc
-> See this guide
-https://www.raspberrypi.org/documentation/installation/installing-images/mac.md
-
-
-/***************************/
-	Device Power
-/***************************/
-// Reboot
+// Resize on PI
+1. Must Resize on Raspberry Pi
+> http://raspberrypi.stackexchange.com/a/501
+$ sudo fdisk /dev/mmcblk0
+	> p (list partitions)
+	> d (delete linux partition and swap)
+	> 2 (delete linux partition)
+	> n (create new partition)
+	> p (make primary)
+	> 2 (slect the partition we deleted before)
+	> w (will save)
 $ reboot
-
-// Shutdown
-$ shutdown -h now
-
-// Check Space
-$ df
-// Check Usage
-$ du / | sort -nr
-
-// Check CPU
-$ ps -ef
+$ resize2fs /dev/mmcblk0p2
+$ reboot
+$ df -h
 
 /***************************/
 	Intial Setup
@@ -58,11 +37,46 @@ $ passwd
 $ apt-get update
 $ apt-get install sudo
 $ apt-get install nano
-$ apt-get install apache2
+$ apt-get install build-essential
+$ apt-get install git
 
 // Change Device Name
-$ nano /etc/hostname 
+$ nano /etc/hostname
 $ nano /etc/hosts
+
+/***************************/
+	Check Version of Pi
+/***************************/
+http://www.raspberrypi-spy.co.uk/2012/09/checking-your-raspberry-pi-board-version/
+$ cat /proc/cpuinfo
+> Revision
+
+/***************************/
+	Device Power
+/***************************/
+// Reboot
+$ reboot
+
+// Shutdown
+$ shutdown -h now
+
+/******************************/
+	Status (Activity Monitor)
+/******************************/
+// IP Adresses
+// Local (LAN)
+$ ifconfig
+// Wifi
+$ iwconfig
+
+// Check Space
+$ df -h
+
+// Check Usage
+$ du / | sort -nr
+
+// Check CPU
+$ ps -ef
 
 /***************************/
 	Camera Setup - PS3-Eye
@@ -81,7 +95,7 @@ $ service motion restart
 
 // Start Camera
 $ motion
-http://10.0.0.25:8081/
+ps
 
 /***************************/
 	WiFi Setup
@@ -113,6 +127,43 @@ $ rfkill list all
 $ rfkill unblock all
 
 /***************************/
+	NO-IP Dynamic DNS Setup
+/***************************/
+// Login Remote and Setup IP
+
+// Client Side Setup
+http://www.noip.com/support/knowledgebase/installing-the-linux-dynamic-update-client/
+
+$ cd /home/install/noip/
+$ wget http://www.no-ip.com/client/linux/noip-duc-linux.tar.gz
+$ tar xzf noip-duc-linux.tar.gz
+$ cd no-ip-2.1.9
+
+// Don't worry about errors
+$ make
+$ make install
+
+// Configure
+$ /usr/local/bin/noip2 -C
+
+// Start
+$ /usr/local/bin/noip2
+
+// Start at Startup
+$ nano /etc/rc.local
+	// Add this line RIGHT BEFORE 'exit 0'
+	> /usr/local/bin/noip2
+
+/***************************/
+	LAMP Stack Setup
+/***************************/
+$ apt-get update
+$ apt-get install apache2
+$ apt-get install mysql-server
+$ apt-get install php5 php-pear php5-mysql
+$ service apache2 restart
+
+/***************************/
 	GPIO Setup
 /***************************/
 $ apt-get install python
@@ -121,3 +172,12 @@ $ apt-get -y install python-rpi.gpio
 // Tutes
 http://www.instructables.com/id/Easiest-Raspberry-Pi-GPIO-LED-Project-Ever/?ALLSTEPS
 https://www.raspberrypi.org/documentation/usage/gpio/
+
+/***************************/
+	GPIO Pin Location
+/***************************/
+// Finding which way round
+1. 'P1' Will be somewhere next to the pins
+	this will show you which way round to read the pins
+2. See /images/pins.png to see locations
+// http://www.raspberrypi-spy.co.uk/2012/06/simple-guide-to-the-rpi-gpio-header-and-pins/

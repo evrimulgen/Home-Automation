@@ -1,0 +1,7 @@
+/***************************/
+	Publically Accessable
+/***************************/
+
+// Using No-IP
+http://kebabstand.ddns.net/
+
