@@ -110,21 +110,28 @@ $ iwconfig
 $ ip link set wlan0 up
 $ iwlist scan
 
-// Joining
+// Joining 1
+apt-get install wicd-curses
+sudo wicd-curses
+> press right arrow key on selected network to configure
+> Automatically connect to network
+
+// Joining 2
 $ chmod 0600 /etc/network/interfaces
 $ apt-get install wpasupplicant
-$ wpa_passphrase BigPond76449A 4FDB17CB49
+$ wpa_passphrase KebabStand-WiFi-2G 4FDB17CB49
 $ nano /etc/network/interfaces
 > auto wlan0
 > iface wlan0 inet dhcp
->         wpa-ssid BigPond76449A
->         wpa-psk 50e77effcf5e2e60f4f1d07e006758bddc4f3f125030ff021c3d95f908c939c3
+>         wpa-ssid KebabStand-WiFi-2G
+>         wpa-psk 47183ef70edaff1f281a94f6e97bea25217839b2b14e453871c71d7856177158
 $ ifup wlan0
 
 // RF Kill Fix
 $ apt-get install rfkill
 $ rfkill list all
 $ rfkill unblock all
+
 
 /***************************/
 	NO-IP Dynamic DNS Setup
@@ -154,6 +161,9 @@ $ nano /etc/rc.local
 	// Add this line RIGHT BEFORE 'exit 0'
 	> /usr/local/bin/noip2
 
+// Update Interval
+$ noip2 -U 1
+
 /***************************/
 	LAMP Stack Setup
 /***************************/
@@ -181,3 +191,14 @@ https://www.raspberrypi.org/documentation/usage/gpio/
 	this will show you which way round to read the pins
 2. See /images/pins.png to see locations
 // http://www.raspberrypi-spy.co.uk/2012/06/simple-guide-to-the-rpi-gpio-header-and-pins/
+
+/***************************/
+	GitHub Config
+/***************************/
+// Follow this guide
+https://help.github.com/articles/generating-ssh-keys/#platform-linux
+
+// Instead of this
+> $ ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+Do 
+> $ ssh-keygen

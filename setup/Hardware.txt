@@ -1,11 +1,4 @@
 /***************************/
-	To Buy
-/***************************/
-1. Raspberry Pi (Latest Model) --> 
-2. Popout Board for Pins --> https://www.sparkfun.com/products/13717
-3. Relay 
-
-/***************************/
 	Owned
 /***************************/
 ----------------------
