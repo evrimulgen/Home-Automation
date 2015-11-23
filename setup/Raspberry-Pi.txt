@@ -76,6 +76,7 @@ $ df -h
 $ du / | sort -nr
 
 // Check CPU
+$ top
 $ ps -ef
 
 /***************************/
