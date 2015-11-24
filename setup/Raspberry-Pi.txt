@@ -79,6 +79,12 @@ $ du / | sort -nr
 $ top
 $ ps -ef
 
+// Check WiFi
+$ wicd-curses
+
+// Check Connection to Apache Server
+$ tail -f /var/log/apache2/access.log
+
 /***************************/
 	Camera Setup - PS3-Eye
 /***************************/
@@ -96,7 +102,18 @@ $ service motion restart
 
 // Start Camera
 $ motion
-ps
+
+// Restart
+$ service motion stop
+$ motion
+
+// Stored Files
+$ cd /var/lib/motion
+
+// Change Framerate
+$ nano /etc/motion/motion.conf
+> framerate
+> stream_maxrate
 
 /***************************/
 	WiFi Setup
