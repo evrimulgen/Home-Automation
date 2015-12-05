@@ -121,6 +121,9 @@ $ nano /etc/motion/motion.conf
 https://wiki.debian.org/WiFi/
 https://wiki.debian.org/WiFi/HowToUse
 
+// Setup WiFi Dongle - Belkin N300
+$ apt-get install firmware-realtek
+
 // Setup WiFi Dongle - Netgear N150
 $ apt-get install firmware-atheros
 $ apt-get install wireless-tools
