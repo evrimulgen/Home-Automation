@@ -115,6 +115,30 @@ $ nano /etc/motion/motion.conf
 > framerate
 > stream_maxrate
 
+/*
+ * Another Camera
+ */
+mkdir /home/root/motion/camera1
+mkdir /home/root/motion/camera2
+
+/*
+ * Camera not working
+ */
+mv videoX video0
+mv videoY video1
+
+> Copy ~/Home-Automation/setup/motion/thread1.conf to /etc/motion/
+> Copy ~/Home-Automation/setup/motion/thread2.conf to /etc/motion/
+
+> mods to /etc/motion/motion.conf
+
+	> uncomment "thread /etc/motion/thread1.conf"
+	> uncomment "thread /etc/motion/thread2.conf"
+
+	> comment out "target_dir /var/lib/motion"
+	> comment out "videodevice /dev/video0"
+	> comment out "stream_port 8081"
+
 /***************************/
 	WiFi Setup
 /***************************/
