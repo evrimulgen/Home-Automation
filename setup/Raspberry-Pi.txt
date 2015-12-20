@@ -86,7 +86,7 @@ $ wicd-curses
 $ tail -f /var/log/apache2/access.log
 
 /***************************/
-	Camera Setup - PS3-Eye
+	Camera Setup
 /***************************/
 // Install Camera
 $ apt-get install motion
@@ -116,19 +116,15 @@ $ nano /etc/motion/motion.conf
 > stream_maxrate
 
 /*
- * Another Camera
+ * Another Camera - DONT USE THREADS
  */
 mkdir /home/root/motion/camera1
 mkdir /home/root/motion/camera2
-
-/*
- * Camera not working
- */
-mv videoX video0
-mv videoY video1
+mkdir /home/root/motion/camera3
 
 > Copy ~/Home-Automation/setup/motion/thread1.conf to /etc/motion/
 > Copy ~/Home-Automation/setup/motion/thread2.conf to /etc/motion/
+> Copy ~/Home-Automation/setup/motion/thread3.conf to /etc/motion/
 
 > mods to /etc/motion/motion.conf
 
@@ -138,6 +134,32 @@ mv videoY video1
 	> comment out "target_dir /var/lib/motion"
 	> comment out "videodevice /dev/video0"
 	> comment out "stream_port 8081"
+
+/*
+ * More than Two Cameras Persistent Setup
+ */
+> We need a UDEV rule
+> https://wiki.debian.org/udev
+> https://wiki.archlinux.org/index.php/Udev#Writing_udev_rules
+
+> 1. Find serials of cameras that are same ID's
+$ udevadm info --name=/dev/video0 --attribute-walk
+> Ctr-F 'serial'
+
+> 2. Find ID's of cameras that are unique
+$ sudo apt-get install usbutils
+$ lsusb
+> Note ID's
+	> ID 046d:0817
+	> ID 1415:2000
+
+$ cd /etc/udev/rules.d/
+$ sudo nano webcam.rules
+>
+ATTRS{serial}=="589DE590", SYMLINK+="camera-logitech-1"
+ATTRS{serial}=="B93A8590", SYMLINK+="camera-logitech-2"
+ATTRS{idVendor}=="1415", ATTRS{idProduct}=="2000", SYMLINK+="camera-ps3-3"
+$ reboot
 
 /***************************/
 	WiFi Setup
