@@ -9,11 +9,23 @@
 // Copy To SD
 1. On Mac / Linux Machine:
 > https://www.raspberrypi.org/documentation/installation/installing-images/mac.md
+> Fat32
+> Master Boot Record
 $ sudo dd bs=1m if=/Users/james/Applications/MiniBian-Jessie.img of=/dev/rdisk1
 
-// Resize on PI
+// Login
+Username: root
+Password: raspberry
+
+/***********************************/
+	Resize Pi
+/***********************************/
 1. Must Resize on Raspberry Pi
-> http://raspberrypi.stackexchange.com/a/501
+
+> FOLLOW THE OFFICIAL GUIDE
+> OFFICIAL: https://minibianpi.wordpress.com/how-to/resize-sd/
+> OTHER: > http://raspberrypi.stackexchange.com/a/501
+
 $ sudo fdisk /dev/mmcblk0
 	> p (list partitions)
 	> d (delete linux partition and swap)
@@ -21,11 +33,31 @@ $ sudo fdisk /dev/mmcblk0
 	> n (create new partition)
 	> p (make primary)
 	> 2 (slect the partition we deleted before)
+	> next you need to enter the start of the old main partition and then the size (enter for complete SD card). The main partition on Minibian image from 2015-11-12 starts at 125056, but the start of your partition might be different. Check the p output!
+	> enter
 	> w (will save)
 $ reboot
 $ resize2fs /dev/mmcblk0p2
 $ reboot
 $ df -h
+
+/***************************/
+	WiFi Setup
+/***************************/
+1. Setup WiFi Dongle - Belkin N300
+
+$ apt-get install firmware-realtek
+$ apt-get install wicd-curses
+
+$ chmod 0600 /etc/network/interfaces
+$ nano /etc/network/interfaces
+> auto wlan0
+> iface wlan0 inet dhcp
+
+$ wicd-curses
+> In wicd-curses press ctrl->P and add wlan0 to the
+> list of wlan devices
+> Connect to network ctrl->C
 
 /***************************/
 	Intial Setup
@@ -64,10 +96,7 @@ $ shutdown -h now
 	Status (Activity Monitor)
 /******************************/
 // IP Adresses
-// Local (LAN)
-$ ifconfig
-// Wifi
-$ iwconfig
+$ wicd-curses
 
 // Check Space
 $ df -h
@@ -84,6 +113,49 @@ $ wicd-curses
 
 // Check Connection to Apache Server
 $ tail -f /var/log/apache2/access.log
+
+/***************************/
+	NO-IP Dynamic DNS Setup
+/***************************/
+// Login Remote and Setup IP
+
+// Client Side Setup
+http://www.noip.com/support/knowledgebase/installing-the-linux-dynamic-update-client/
+
+$ cd /home/install/noip/
+$ wget http://www.no-ip.com/client/linux/noip-duc-linux.tar.gz
+$ tar xzf noip-duc-linux.tar.gz
+$ cd noip-2.1.9-1
+
+// Don't worry about errors
+$ make
+$ make install
+
+// Configure
+$ /usr/local/bin/noip2 -C
+
+// Start
+$ /usr/local/bin/noip2
+
+// Start at Startup
+$ nano /etc/rc.local
+	// Add this line RIGHT BEFORE 'exit 0'
+	> /usr/local/bin/noip2
+
+// Update Interval
+$ noip2 -U 1
+
+// Reboot
+$ reboot
+
+/***************************/
+	LAMP Stack Setup
+/***************************/
+$ apt-get update
+$ apt-get install apache2
+$ apt-get install mysql-server
+$ apt-get install php5 php-pear php5-mysql
+$ service apache2 restart
 
 /***************************/
 	Camera Setup
@@ -160,85 +232,6 @@ ATTRS{serial}=="589DE590", SYMLINK+="camera-logitech-1"
 ATTRS{serial}=="B93A8590", SYMLINK+="camera-logitech-2"
 ATTRS{idVendor}=="1415", ATTRS{idProduct}=="2000", SYMLINK+="camera-ps3-3"
 $ reboot
-
-/***************************/
-	WiFi Setup
-/***************************/
-https://wiki.debian.org/WiFi/
-https://wiki.debian.org/WiFi/HowToUse
-
-// Setup WiFi Dongle - Belkin N300
-$ apt-get install firmware-realtek
-
-// Setup WiFi Dongle - Netgear N150
-$ apt-get install firmware-atheros
-$ apt-get install wireless-tools
-$ iwconfig
-$ ip link set wlan0 up
-$ iwlist scan
-
-// Joining 1
-apt-get install wicd-curses
-sudo wicd-curses
-> press right arrow key on selected network to configure
-> Automatically connect to network
-
-// Joining 2
-$ chmod 0600 /etc/network/interfaces
-$ apt-get install wpasupplicant
-$ wpa_passphrase KebabStand-WiFi-2G 4FDB17CB49
-$ nano /etc/network/interfaces
-> auto wlan0
-> iface wlan0 inet dhcp
->         wpa-ssid KebabStand-WiFi-2G
->         wpa-psk 47183ef70edaff1f281a94f6e97bea25217839b2b14e453871c71d7856177158
-$ ifup wlan0
-
-// RF Kill Fix
-$ apt-get install rfkill
-$ rfkill list all
-$ rfkill unblock all
-
-
-/***************************/
-	NO-IP Dynamic DNS Setup
-/***************************/
-// Login Remote and Setup IP
-
-// Client Side Setup
-http://www.noip.com/support/knowledgebase/installing-the-linux-dynamic-update-client/
-
-$ cd /home/install/noip/
-$ wget http://www.no-ip.com/client/linux/noip-duc-linux.tar.gz
-$ tar xzf noip-duc-linux.tar.gz
-$ cd no-ip-2.1.9
-
-// Don't worry about errors
-$ make
-$ make install
-
-// Configure
-$ /usr/local/bin/noip2 -C
-
-// Start
-$ /usr/local/bin/noip2
-
-// Start at Startup
-$ nano /etc/rc.local
-	// Add this line RIGHT BEFORE 'exit 0'
-	> /usr/local/bin/noip2
-
-// Update Interval
-$ noip2 -U 1
-
-/***************************/
-	LAMP Stack Setup
-/***************************/
-$ apt-get update
-$ apt-get install apache2
-$ apt-get install mysql-server
-$ apt-get install php5 php-pear php5-mysql
-$ service apache2 restart
 
 /***************************/
 	GPIO Setup
