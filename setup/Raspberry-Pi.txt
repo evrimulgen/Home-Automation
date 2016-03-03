@@ -42,6 +42,25 @@ $ reboot
 $ df -h
 
 /***************************/
+	Cron
+/***************************/
+0. Permissions
+chmod 755 yourScript.sh
+
+1. Add Cron
+crontab -e
+
+e.g: run every 30 minutes
+*/30 * * * * /root/Home-Automation/sources/GPIO/Water.sh >/dev/null 2>&1
+
+2. View Crons
+crontab -l
+
+3. Generator
+http://crontab-generator.org/
+
+
+/***************************/
 	WiFi Setup
 /***************************/
 1. Setup WiFi Dongle - Belkin N300
@@ -246,6 +265,15 @@ https://www.raspberrypi.org/documentation/usage/gpio/
 /***************************/
 	GPIO Pin Location
 /***************************/
+1. Liams Pi
+https://www.raspberrypi.org/blog/pinout-for-gpio-connectors/
+
+Pins I am Using:
+
+physical 3 from the top = ground
+physcial 6 from the top = pin 12 (using GPIO.BOARD)
+
+
 // Finding which way round
 1. 'P1' Will be somewhere next to the pins
 	this will show you which way round to read the pins
